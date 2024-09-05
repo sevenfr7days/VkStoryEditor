@@ -33,7 +33,7 @@ export const Home = ({ id, fetchedUser }) => {
 function openStoryEditor(){
   bridge.send('VKWebAppShowStoryBox', {
     background_type: 'image',
-    url : 'https://sun9-65.userapi.com/c850136/v850136098/1b77eb/0YK6suXkY24.jpg',
+    url : 'https://sevenfr7days.github.io/VkStoryEditor/src/assets/IMG_5338.JPG',
     attachment: {
       text: 'book',
       type: 'photo',
