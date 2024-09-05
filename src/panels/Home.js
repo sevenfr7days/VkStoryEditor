@@ -33,7 +33,7 @@ export const Home = ({ id, fetchedUser }) => {
 function openStoryEditor(){
   bridge.send('VKWebAppShowStoryBox', {
     background_type: 'image',
-    url : 'https://sevenfr7days.github.io/VkStoryEditor/src/assets/IMG_5338.JPG',
+    url : "https://sevenfr7days.github.io/VkStoryEditor/src/assets/" + randomInteger(1, 12) + ".JPG",
     attachment: {
       text: 'book',
       type: 'photo',
@@ -49,6 +49,12 @@ function openStoryEditor(){
         // Ошибка
         console.log(error);
       });
+}
+
+function randomInteger(min, max) {
+  // случайное число от min до (max+1)
+  let rand = min + Math.random() * (max + 1 - min);
+  return Math.floor(rand);
 }
 
 Home.propTypes = {
