@@ -1,10 +1,11 @@
-import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar } from '@vkontakte/vkui';
-import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
+import { Panel, PanelHeader, Header, Group, Cell, Div, Avatar } from '@vkontakte/vkui';
+// import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import PropTypes from 'prop-types';
+import bridge from "@vkontakte/vk-bridge";
 
 export const Home = ({ id, fetchedUser }) => {
   const { photo_200, city, first_name, last_name } = { ...fetchedUser };
-  const routeNavigator = useRouteNavigator();
+  // const routeNavigator = useRouteNavigator();
 
   return (
     <Panel id={id}>
@@ -19,14 +20,36 @@ export const Home = ({ id, fetchedUser }) => {
 
       <Group header={<Header mode="secondary">Navigation Example</Header>}>
         <Div>
-          <Button stretched size="l" mode="secondary" onClick={() => routeNavigator.push('persik')}>
-            Покажите Персика, пожалуйста!
-          </Button>
+          {/*<Button stretched size="l" mode="secondary" onClick={() => routeNavigator.push('persik')}>*/}
+          {/*  Покажите Персика, пожалуйста!*/}
+          {/*</Button>*/}
+          <button onClick={() => openStoryEditor()}>Пустить пылиииии в глаза</button>
         </Div>
       </Group>
     </Panel>
   );
 };
+
+function openStoryEditor(){
+  bridge.send('VKWebAppShowStoryBox', {
+    background_type: 'image',
+    url : 'https://sun9-65.userapi.com/c850136/v850136098/1b77eb/0YK6suXkY24.jpg',
+    attachment: {
+      text: 'book',
+      type: 'photo',
+      owner_id: 743784474,
+      id: 12345678
+    }})
+      .then((data) => {
+        if (data.code_data) {
+          // Редактор историй открыт
+          console.log(data);
+        }})
+      .catch((error) => {
+        // Ошибка
+        console.log(error);
+      });
+}
 
 Home.propTypes = {
   id: PropTypes.string.isRequired,
