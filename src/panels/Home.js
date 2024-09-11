@@ -1,58 +1,52 @@
-import { Panel, PanelHeader, Header, Group, Cell, Div, Avatar } from '@vkontakte/vkui';
-// import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
+import { Panel, PanelHeader, Header, Group, Div } from '@vkontakte/vkui';
 import PropTypes from 'prop-types';
 import bridge from "@vkontakte/vk-bridge";
+import { Button } from '@vkontakte/vkui';
 
-export const Home = ({ id, fetchedUser }) => {
-  const { photo_200, city, first_name, last_name } = { ...fetchedUser };
-  // const routeNavigator = useRouteNavigator();
+export const Home = ({ id }) => {
 
   return (
     <Panel id={id}>
       <PanelHeader>Главная</PanelHeader>
-      {fetchedUser && (
-        <Group header={<Header mode="secondary">User Data Fetched with VK Bridge</Header>}>
-          <Cell before={photo_200 && <Avatar src={photo_200} />} subtitle={city?.title}>
-            {`${first_name} ${last_name}`}
-          </Cell>
-        </Group>
-      )}
-
-      <Group header={<Header mode="secondary">Navigation Example</Header>}>
+      <Group header={<Header mode="secondary">Панель успешного успеха</Header>}>
         <Div>
-          {/*<Button stretched size="l" mode="secondary" onClick={() => routeNavigator.push('persik')}>*/}
-          {/*  Покажите Персика, пожалуйста!*/}
-          {/*</Button>*/}
-          <button onClick={() => openStoryEditor()}>Пустить пылиииии в глаза</button>
+          <Button stretched size="l" onClick={() => infoGypsyStory()}>Выложить в историю успешный успех</Button>
+        </Div>
+        <Div>
+          <Button stretched size="l" onClick={() => dogStory()}>Выложить в историю собаку</Button>
         </Div>
       </Group>
     </Panel>
   );
 };
 
-function openStoryEditor(){
-  bridge.send('VKWebAppShowStoryBox', {
+async function infoGypsyStory(){
+  await bridge.send('VKWebAppShowStoryBox', {
     background_type: 'image',
-    url : "https://sevenfr7days.github.io/VkStoryEditor/src/assets/" + randomInteger(1, 12) + ".JPG",
-    attachment: {
-      text: 'book',
-      type: 'photo',
-      owner_id: 743784474,
-      id: 12345678
-    }})
-      .then((data) => {
-        if (data.code_data) {
-          // Редактор историй открыт
-          console.log(data);
-        }})
-      .catch((error) => {
-        // Ошибка
-        console.log(error);
-      });
+    url : "https://sevenfr7days.github.io/VkStoryEditor/src/assets/" + randomInteger(1, 35) + ".JPG"
+  }
+  )
 }
 
+async function dogStory() {
+    try {
+        const response = await fetch('https://dog.ceo/api/breeds/image/random');
+        const data = await response.json();
+        const imageUrl = data.message;
+        await bridge.send(
+            'VKWebAppShowStoryBox',
+            {
+            background_type: 'image',
+            url: imageUrl
+            }
+        )
+    } catch (error) {
+        console.log('Error:', error);
+    }
+}
+
+
 function randomInteger(min, max) {
-  // случайное число от min до (max+1)
   let rand = min + Math.random() * (max + 1 - min);
   return Math.floor(rand);
 }
